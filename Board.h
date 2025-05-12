@@ -8,9 +8,16 @@ class Board
 
 public:
 	Board();
-	bool isValidMove(int originX, int originY, int destinationX, int destinantionY);
-	void Move(int originX, int originY, int destinationX, int destinantionY);
+	bool IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinantionY);
+	void Move(const int& originX, const int& originY, const int& destinationX, const int& destinantionY);
 	void SwitchTurn();
-	void PrintBoard();
+	void PrintBoard() const;
+
+	const Color GetTurn() const {
+		return turn;
+	}
+	const Piece* GetPosition(const int& x, const int& y) {
+		return board[x][y];
+	}
 };
 

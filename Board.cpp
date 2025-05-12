@@ -53,17 +53,19 @@ Board::Board() {
 	turn = Color::White;
 }
 
-bool Board::isValidMove(int originX, int originY, int destinationX, int destinantionY)
+bool Board::IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinantionY)
 {
-	//add some logi to check "check"
-	if (board[originX][originY]->GetColor() == turn /*and board[originX][originY]->IsValidMove(originX, originY, destinationX, destinantionY)*/ and board[destinationX][destinantionY]->GetColor() != turn)
-		return true;
+	//add some logic to check "check"
+	//if ( and board[originX][originY]->IsValidMove(originX, originY, destinationX, destinantionY) and board[destinationX][destinantionY]->GetColor() != turn)
+	
+	return board[originX][originY]->IsValidMove(originX, originY, destinationX, destinantionY);
 }
 
-void Board::Move(int originX, int originY, int destinationX, int destinantionY)
+void Board::Move(const int& originX, const int& originY, const int& destinationX, const int& destinantionY)
 {
-	if (isValidMove(originX, originY, destinationX, destinantionY)) {
+	if (IsValidMove(originX, originY, destinationX, destinantionY)) {
 		//add some logic to know the piece is no longer in board
+		delete board[destinationX][destinantionY];
 		board[destinationX][destinantionY] = board[originX][originY];
 		board[originX][originY] = nullptr;
 	}
@@ -74,7 +76,7 @@ void Board::SwitchTurn()
 	turn = (turn == Color::White) ? Color::Black : Color::White;
 }
 
-void Board::PrintBoard()
+void Board::PrintBoard() const
 {
 	bool isBlack = false;
 
@@ -96,7 +98,7 @@ void Board::PrintBoard()
 				std::cout << board[i][k]->GetRepresentation();
 			}
 			else {
-				std::cout << " ";
+				std::cout << "  ";
 			}
 			
 			std::cout << " ";

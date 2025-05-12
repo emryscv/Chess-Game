@@ -9,10 +9,11 @@ enum Color {
 
 class Piece
 {
+protected:
 	Color color;
 
 public:
-	Piece(Color color) {
+	Piece(const Color& color) {
 		this->color = color;
 	}
 	
@@ -22,6 +23,6 @@ public:
 
 	virtual std::string GetRepresentation() const = 0;
 
-	virtual bool IsValidMove(int originX, int originY, int destinationX, int destinantionY) const = 0;
+	virtual bool IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinationY) const = 0;
 };
 

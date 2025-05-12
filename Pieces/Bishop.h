@@ -6,6 +6,6 @@ class Bishop :
 public:
     Bishop(Color color) : Piece(color) {}
     std::string GetRepresentation() const override;
-    bool IsValidMove(int originX, int originY, int destinationX, int destinationY) const override;
+    bool IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinationY) const override;
 };
 
