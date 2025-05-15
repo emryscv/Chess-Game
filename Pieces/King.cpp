@@ -4,10 +4,15 @@ std::string King::GetRepresentation() const {
 	return "Ki";
 }
 
-bool King::IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinationY) const
+std::pair<int, int> King::GetCoordinates() const
+{
+	return std::pair<int, int>(x, y);
+}
+
+bool King::IsValidMove(const int& destinationX, const int& destinationY) const
 {
 	return 0 <= destinationX and destinationX <= 7 and 0 <= destinationY and destinationY <= 7 and
-		(originX - 1 == destinationX and (originY - 1 == destinationY or originY == destinationY or originY + 1 == destinationY) or
-		originX == destinationX and (originY - 1 == destinationY or originY + 1 == destinationY) or
-		originX + 1 == destinationX and (originY - 1 == destinationY or originY == destinationY or originY + 1 == destinationY));
+		(x - 1 == destinationX and (y - 1 == destinationY or y == destinationY or y + 1 == destinationY) or
+		x == destinationX and (y - 1 == destinationY or y + 1 == destinationY) or
+		x + 1 == destinationX and (y - 1 == destinationY or y == destinationY or y + 1 == destinationY));
 }

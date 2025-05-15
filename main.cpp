@@ -10,7 +10,7 @@ int main(void)
 		system("cls");
 		board.PrintBoard();
 
-		std::cout << "Current Turn: " << (board.GetTurn() == Color::White ? "White" : "Black");
+		std::cout << "Current Turn: " << (board.GetTurn() == Color::White ? "White" : "Black") << "\n";
 
 		int originX;
 		int originY;
@@ -38,11 +38,15 @@ int main(void)
 			std::cin >> destinationY;
 			if (board.IsValidMove(originX, originY, destinationX, destinationY)) invalid = false;
 			else {
-				std::cout << "Not a valid move!!\n";
+				std::cout << "Not a valid move!!\n"; 
 			}
 		}
 
 		board.Move(originX, originY, destinationX, destinationY);
+		if (board.IsCheck(Color::White)) std::cout << "Check";
+		else { std::cout << "No Check"; }
+
+		board.SwitchTurn();
 	}
 	return 0;
 }

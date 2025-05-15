@@ -4,10 +4,10 @@ std::string Knight::GetRepresentation() const {
 	return "Kn";
 }
 
-bool Knight::IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinationY) const {
+bool Knight::IsValidMove(const int& destinationX, const int& destinationY) const {
 	return 0 <= destinationX and destinationX <= 7 and 0 <= destinationY and destinationY <= 7 and
-		(originX - 2 == destinationX and (originY + 1 == destinationY or originY - 1 == destinationY) or
-			originY - 2 == destinationY and (originX + 1 == destinationX or originX - 1 == destinationX) or
-			originX + 2 == destinationX and (originY + 1 == destinationY or originY - 1 == destinationY) or
-			originY + 2 == destinationY and (originX + 1 == destinationX or originX - 1 == destinationX));
+		(x - 2 == destinationX and (y + 1 == destinationY or y - 1 == destinationY) or
+			y - 2 == destinationY and (x + 1 == destinationX or x - 1 == destinationX) or
+			x + 2 == destinationX and (y + 1 == destinationY or y - 1 == destinationY) or
+			y + 2 == destinationY and (x + 1 == destinationX or x - 1 == destinationX));
 }
