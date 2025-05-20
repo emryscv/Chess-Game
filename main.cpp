@@ -11,6 +11,7 @@ int main(void)
 		board.PrintBoard();
 
 		std::cout << "Current Turn: " << (board.GetTurn() == Color::White ? "White" : "Black") << "\n";
+		if (board.GetIsCheck()) std::cout << "Check\n";
 
 		int originX;
 		int originY;
@@ -23,7 +24,7 @@ int main(void)
 			std::cin >> originX;
 			std::cout << "Enter col: ";
 			std::cin >> originY;
-			if (board.GetPosition(originX, originY) != nullptr and board.GetPosition(originX, originY)->GetColor() == board.GetTurn()) invalid = false;
+			if (Board::ValidCoordinates(originX, originY) and board.GetPosition(originX, originY) != nullptr and board.GetPosition(originX, originY)->GetColor() == board.GetTurn()) invalid = false;
 			else {
 				std::cout << "Not one of your pieces!!\n";
 			}
@@ -43,9 +44,12 @@ int main(void)
 		}
 
 		board.Move(originX, originY, destinationX, destinationY);
-		if (board.IsCheck(Color::White)) std::cout << "Check";
-		else { std::cout << "No Check"; }
+		
+		if (board.GetIsCheck()) board.SetCheck(false);
 
+		if (board.IsCheck(board.GetTurn() == Color::White ? Color::Black : Color::White)) {
+			board.SetCheck(true);
+		}
 		board.SwitchTurn();
 	}
 	return 0;

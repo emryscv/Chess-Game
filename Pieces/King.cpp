@@ -6,7 +6,7 @@ std::string King::GetRepresentation() const {
 
 std::pair<int, int> King::GetCoordinates() const
 {
-	return std::pair<int, int>(x, y);
+	return std::make_pair(x, y);
 }
 
 bool King::IsValidMove(const int& destinationX, const int& destinationY) const

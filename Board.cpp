@@ -15,14 +15,15 @@ Board::Board() {
 	}
 
 	board[0][0] = new Rook(Color::Black, 0, 0);
-	board[0][1] = new Knight(Color::Black, 0, 1);
+	/*board[0][1] = new Knight(Color::Black, 0, 1);
 	board[0][2] = new Bishop(Color::Black, 0, 2);
 	board[0][3] = new Queen(Color::Black, 0, 3);
-	board[0][4] = blackKing = new King(Color::Black, 0, 4);
-	board[0][5] = new Bishop(Color::Black, 0, 5);
-	board[0][6] = new Knight(Color::Black, 0, 6);
+	*/board[0][4] = blackKing = new King(Color::Black, 0, 4);
 	board[0][7] = new Rook(Color::Black, 0, 7);
 
+	/*board[0][5] = new Bishop(Color::Black, 0, 5);
+	board[0][6] = new Knight(Color::Black, 0, 6);
+	
 	board[1][0] = new Pawn(Color::Black, 1, 0);
 	board[1][1] = new Pawn(Color::Black, 1, 1);
 	board[1][2] = new Pawn(Color::Black, 1, 2);
@@ -40,15 +41,15 @@ Board::Board() {
 	board[6][5] = new Pawn(Color::White, 6, 5);
 	board[6][6] = new Pawn(Color::White, 6, 6);
 	board[6][7] = new Pawn(Color::White, 6, 7);
-
+	
 	board[7][0] = new Rook(Color::White, 7, 0);
 	board[7][1] = new Knight(Color::White, 7, 1);
-	board[7][2] = new Bishop(Color::White, 7, 2);
-	board[7][3] = new Queen(Color::White, 7, 3);
+	board[3][1] = new Bishop(Color::White, 3, 1);
+	*/board[7][3] = new Queen(Color::White, 7, 3);
 	board[7][4] = whiteKing = new King(Color::White, 7, 4);
-	board[7][5] = new Bishop(Color::White, 7, 5);
+	/*board[7][5] = new Bishop(Color::White, 7, 5);
 	board[7][6] = new Knight(Color::White, 7, 6);
-	board[7][7] = new Rook(Color::White, 7, 7);
+	*/board[7][7] = new Rook(Color::White, 7, 7);
 
 	turn = Color::White;
 }
@@ -57,9 +58,10 @@ bool Board::IsValidMove(const int& originX, const int& originY, const int& desti
 {
 	//add some logic to check "check"
 
-	std::cout << board[originX][originY]->IsValidMove(destinationX, destinationY) << "\n";
-	std::cout << (board[destinationX][destinationY] == nullptr) << "\n";
-	if (board[destinationX][destinationY] != nullptr) std::cout << (board[destinationX][destinationY]->GetColor() != turn) << "\n";
+	if (board[originX][originY]->GetRepresentation() == "Ki" and
+		(destinationX == 7 or destinationX == 0) and 
+		((destinationY == 6 and kingNotMoved[turn] and rightRookNotMoved[turn]) or 
+		  (destinationY == 2 and kingNotMoved[turn] and leftRookNotMoved[turn]))) return true;
 
 	if (board[originX][originY]->IsValidMove(destinationX, destinationY) and (board[destinationX][destinationY] == nullptr or board[destinationX][destinationY]->GetColor() != turn)) {
 		int min;
@@ -128,11 +130,34 @@ void Board::Move(const int& originX, const int& originY, const int& destinationX
 {
 	//add some logic to know the piece is no longer in board
 	if(board[destinationX][destinationY] != nullptr) delete board[destinationX][destinationY];
-
 	board[destinationX][destinationY] = board[originX][originY];
 	board[destinationX][destinationY]->SetCoordinates(destinationX, destinationY);
 	board[originX][originY] = nullptr;
+	std::string representation = board[destinationX][destinationY]->GetRepresentation();
+	
+	if (board[destinationX][destinationY]->GetRepresentation() == "Ki" and kingNotMoved[turn] and (destinationX == 7 or destinationX == 0)){
+		if (destinationY == 6 and rightRookNotMoved[turn]) {
+			Move(destinationX, 7, destinationX, 5);
+		}
+		else if (destinationY == 2 and leftRookNotMoved[turn]) {
+			Move(destinationX, 0, destinationX, 3);
+		}
+	}
 
+	if (representation == "Ki" and kingNotMoved[turn]) {
+		kingNotMoved[turn] = false;
+	}
+	else if (representation == "Ro" and originX == 7) {
+		if (originY == 0 and leftRookNotMoved[turn]) {
+			leftRookNotMoved[turn] = false;
+		}
+		else if (originY == 7 and rightRookNotMoved[turn]) {
+			rightRookNotMoved[turn] = false;
+		}
+	}
+	else if (representation == "Pa" and destinationY == 0) {
+		//add logic to switch to another peice
+	}
 }
 
 void Board::SwitchTurn()
@@ -189,6 +214,8 @@ void Board::PrintBoard() const
 bool Board::IsCheck(const Color& color) const
 {
 	King* king = color == Color::White ? whiteKing : blackKing;
+
+
 	std::pair<int, int> coordinates = king->GetCoordinates();
 
 	int dxKnight[8] = { -2, -1, 1, 2, 2, 1, -1, -2 };
