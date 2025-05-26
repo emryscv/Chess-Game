@@ -144,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="MoveContext.h" />
     <ClInclude Include="Pieces\Bishop.h" />
     <ClInclude Include="Pieces\King.h" />
     <ClInclude Include="Pieces\Knight.h" />

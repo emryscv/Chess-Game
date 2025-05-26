@@ -1,6 +1,10 @@
 #include <GLFW/glfw3.h>
 #include "Board.h"
 #include "iostream"
+#include "Pieces/Queen.h"
+#include "Pieces/Rook.h"
+#include "Pieces/Knight.h"
+#include "Pieces/Bishop.h"
 
 int main(void)
 {
@@ -45,9 +49,18 @@ int main(void)
 
 		board.Move(originX, originY, destinationX, destinationY);
 		
+		if (board.GetPromotePawn()) {
+			int option;
+			std::cout << "Pick one:\n1. Queen\n2. Rook\n3. Knight\n4. Bishop\n";
+			std::cin >> option;
+			
+			board.SetPosition(destinationX, destinationY, option);
+			board.ResetChangePiece();
+		}
+
 		if (board.GetIsCheck()) board.SetCheck(false);
 
-		if (board.IsCheck(board.GetTurn() == Color::White ? Color::Black : Color::White)) {
+		if (board.IsCheck(board.GetTurn() == Color::White ? Color::Black : Color::White)){
 			board.SetCheck(true);
 		}
 		board.SwitchTurn();

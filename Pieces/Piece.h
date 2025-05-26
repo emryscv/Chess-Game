@@ -1,6 +1,7 @@
 #pragma once
 #include "iostream";
 #include "string";
+#include "../MoveContext.h"
 
 enum Color {
 	Black,
@@ -32,6 +33,6 @@ public:
 
 	virtual std::string GetRepresentation() const = 0;
 
-	virtual bool IsValidMove(const int& destinationX, const int& destinationY) const = 0;
+	virtual bool IsValidMove(const int& destinationX, const int& destinationY, const MoveContext& context) const = 0;
 };
 

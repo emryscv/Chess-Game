@@ -15,15 +15,14 @@ Board::Board() {
 	}
 
 	board[0][0] = new Rook(Color::Black, 0, 0);
-	/*board[0][1] = new Knight(Color::Black, 0, 1);
+	board[0][1] = new Knight(Color::Black, 0, 1);
 	board[0][2] = new Bishop(Color::Black, 0, 2);
 	board[0][3] = new Queen(Color::Black, 0, 3);
-	*/board[0][4] = blackKing = new King(Color::Black, 0, 4);
+	board[0][4] = blackKing = new King(Color::Black, 0, 4);
+	board[0][5] = new Bishop(Color::Black, 0, 5);
+	board[0][6] = new Knight(Color::Black, 0, 6);
 	board[0][7] = new Rook(Color::Black, 0, 7);
 
-	/*board[0][5] = new Bishop(Color::Black, 0, 5);
-	board[0][6] = new Knight(Color::Black, 0, 6);
-	
 	board[1][0] = new Pawn(Color::Black, 1, 0);
 	board[1][1] = new Pawn(Color::Black, 1, 1);
 	board[1][2] = new Pawn(Color::Black, 1, 2);
@@ -41,29 +40,32 @@ Board::Board() {
 	board[6][5] = new Pawn(Color::White, 6, 5);
 	board[6][6] = new Pawn(Color::White, 6, 6);
 	board[6][7] = new Pawn(Color::White, 6, 7);
-	
+
 	board[7][0] = new Rook(Color::White, 7, 0);
 	board[7][1] = new Knight(Color::White, 7, 1);
-	board[3][1] = new Bishop(Color::White, 3, 1);
-	*/board[7][3] = new Queen(Color::White, 7, 3);
+	board[7][2] = new Bishop(Color::White, 3, 1);
+	board[7][3] = new Queen(Color::White, 7, 3);
 	board[7][4] = whiteKing = new King(Color::White, 7, 4);
-	/*board[7][5] = new Bishop(Color::White, 7, 5);
+	board[7][5] = new Bishop(Color::White, 7, 5);
 	board[7][6] = new Knight(Color::White, 7, 6);
-	*/board[7][7] = new Rook(Color::White, 7, 7);
+	board[7][7] = new Rook(Color::White, 7, 7);
 
 	turn = Color::White;
 }
 
 bool Board::IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinationY)
 {
-	//add some logic to check "check"
+	//check for x and y in board
+	if (!ValidCoordinates(destinationX, destinationY)) return false;
 
-	if (board[originX][originY]->GetRepresentation() == "Ki" and
-		(destinationX == 7 or destinationX == 0) and 
-		((destinationY == 6 and kingNotMoved[turn] and rightRookNotMoved[turn]) or 
-		  (destinationY == 2 and kingNotMoved[turn] and leftRookNotMoved[turn]))) return true;
+	//check if the destination is empty or enemy position
+	if ((board[destinationX][destinationY] != nullptr and (board[destinationX][destinationY]->GetColor() == turn or board[destinationX][destinationY]->GetRepresentation() == "Ki"))) return false;
 
-	if (board[originX][originY]->IsValidMove(destinationX, destinationY) and (board[destinationX][destinationY] == nullptr or board[destinationX][destinationY]->GetColor() != turn)) {
+	//create a context
+	MoveContext context(kingNotMoved[turn], rightRookNotMoved[turn], leftRookNotMoved[turn], board[destinationX][destinationY] != nullptr);
+
+	//check if the move make sense according the rules
+	if (board[originX][originY]->IsValidMove(destinationX, destinationY, context)) {
 		int min;
 		int max;
 		if (originX == destinationX) {
@@ -111,31 +113,29 @@ bool Board::IsValidMove(const int& originX, const int& originY, const int& desti
 			}
 		}
 
+		if (board[originX][originY]->GetRepresentation() == "Ki" and originY == 4 and (originX == 0 or originX == 7) and originX == destinationX) {
+			if (destinationY == 6 and IsUnderThreat(turn, originX, 5)) return false;
+			if (destinationY == 2 and IsUnderThreat(turn, originX, 3)) return false;
+		}
+
 		//Move the piece virtualy to check for check.
-		Move(originX, originY, destinationX, destinationY);
-		
-		if (IsCheck(turn)) {
-			Move(destinationX, destinationY, originX, originY);
-			return false;
-		}
-		else {
-			Move(destinationX, destinationY, originX, originY);
-			return true;
-		}
+		return !IsCheck(turn, originX, originY, destinationX, destinationY);
 	}
+
 	return false;
 }
 
 void Board::Move(const int& originX, const int& originY, const int& destinationX, const int& destinationY)
 {
 	//add some logic to know the piece is no longer in board
-	if(board[destinationX][destinationY] != nullptr) delete board[destinationX][destinationY];
+	if (board[destinationX][destinationY] != nullptr) delete board[destinationX][destinationY];
 	board[destinationX][destinationY] = board[originX][originY];
 	board[destinationX][destinationY]->SetCoordinates(destinationX, destinationY);
 	board[originX][originY] = nullptr;
+
 	std::string representation = board[destinationX][destinationY]->GetRepresentation();
-	
-	if (board[destinationX][destinationY]->GetRepresentation() == "Ki" and kingNotMoved[turn] and (destinationX == 7 or destinationX == 0)){
+
+	if (board[destinationX][destinationY]->GetRepresentation() == "Ki" and kingNotMoved[turn] and (destinationX == 7 or destinationX == 0)) {
 		if (destinationY == 6 and rightRookNotMoved[turn]) {
 			Move(destinationX, 7, destinationX, 5);
 		}
@@ -155,8 +155,8 @@ void Board::Move(const int& originX, const int& originY, const int& destinationX
 			rightRookNotMoved[turn] = false;
 		}
 	}
-	else if (representation == "Pa" and destinationY == 0) {
-		//add logic to switch to another peice
+	else if (representation == "Pa" and (destinationX == 0 or destinationX == 7)) {
+		promotePawn = true;
 	}
 }
 
@@ -214,32 +214,51 @@ void Board::PrintBoard() const
 bool Board::IsCheck(const Color& color) const
 {
 	King* king = color == Color::White ? whiteKing : blackKing;
-
-
 	std::pair<int, int> coordinates = king->GetCoordinates();
 
+	return IsUnderThreat(color, coordinates.first, coordinates.second);
+}
+
+
+bool Board::IsCheck(const Color& color, const int& originX, const int& originY, const int& destinationX, const int& destinationY) {
+
+	Piece* aux = board[destinationX][destinationY];
+	board[destinationX][destinationY] = board[originX][originY];
+	board[destinationX][destinationY]->SetCoordinates(destinationX, destinationY);
+	board[originX][originY] = nullptr;
+
+	bool answer = IsCheck(color);
+
+	board[originX][originY] = board[destinationX][destinationY];
+	board[originX][originY]->SetCoordinates(originX, originY);
+	board[destinationX][destinationY] = aux;
+
+	return answer;
+}
+
+bool Board::IsUnderThreat(const Color& color, const int& positionX, const int& positionY) const {
 	int dxKnight[8] = { -2, -1, 1, 2, 2, 1, -1, -2 };
 	int dyKnight[8] = { -1, -2, -2, -1, 1, 2, 2, 1 };
 
-	int dxKing[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
-	int dyKing[8] = {0, -1, -1, -1, 0, 1, 1, 1};
+	int dxKing[8] = { -1, -1, 0, 1, 1, 1, 0, -1 };
+	int dyKing[8] = { 0, -1, -1, -1, 0, 1, 1, 1 };
 
 	//Check pawns
 	//TODO It is only white check tho.
 
-	int x = color == Color::White ? coordinates.first - 1 : coordinates.first + 1;
-	int y = coordinates.second + 1;
+	int x = color == Color::White ? positionX - 1 : positionX + 1;
+	int y = positionY + 1;
 
 	if (ValidCoordinates(x, y) and board[x][y] != nullptr and board[x][y]->GetColor() != color and board[x][y]->GetRepresentation() == "Pa") return true;
 
-	y = coordinates.second - 1;
+	y = positionY - 1;
 
 	if (ValidCoordinates(x, y) and board[x][y] != nullptr and board[x][y]->GetColor() != color and board[x][y]->GetRepresentation() == "Pa") return true;
 
 	//Check Knights
 	for (int i = 0; i < 8; i++) {
-		x = coordinates.first + dxKnight[i];
-		y = coordinates.second + dyKnight[i];
+		x = positionX + dxKnight[i];
+		y = positionY + dyKnight[i];
 		if (ValidCoordinates(x, y) and
 			board[x][y] != nullptr and
 			board[x][y]->GetColor() != color and
@@ -250,8 +269,8 @@ bool Board::IsCheck(const Color& color) const
 
 	//Check for other King
 	for (int i = 0; i < 8; i++) {
-		x = coordinates.first + dxKing[i];
-		y = coordinates.second + dyKing[i];
+		x = positionX + dxKing[i];
+		y = positionY + dyKing[i];
 		if (ValidCoordinates(x, y) and
 			board[x][y] != nullptr and
 			board[x][y]->GetColor() != color and
@@ -261,14 +280,14 @@ bool Board::IsCheck(const Color& color) const
 	}
 
 	//Check Rook, Queen and Bishop
-	return (CheckCondtion(coordinates.first, coordinates.second, 1, 0, "Ro", "Qu", color) or
-		CheckCondtion(coordinates.first, coordinates.second, 0, 1, "Ro", "Qu", color) or
-		CheckCondtion(coordinates.first, coordinates.second, -1, 0, "Ro", "Qu", color) or
-		CheckCondtion(coordinates.first, coordinates.second, 0, -1, "Ro", "Qu", color) or
-		CheckCondtion(coordinates.first, coordinates.second, 1, 1, "Bi", "Qu", color) or
-		CheckCondtion(coordinates.first, coordinates.second, -1, -1, "Bi", "Qu", color) or
-		CheckCondtion(coordinates.first, coordinates.second, 1, -1, "Bi", "Qu", color) or
-		CheckCondtion(coordinates.first, coordinates.second, -1, 1, "Bi", "Qu", color));
+	return (CheckCondtion(positionX, positionY, 1, 0, "Ro", "Qu", color) or
+		CheckCondtion(positionX, positionY, 0, 1, "Ro", "Qu", color) or
+		CheckCondtion(positionX, positionY, -1, 0, "Ro", "Qu", color) or
+		CheckCondtion(positionX, positionY, 0, -1, "Ro", "Qu", color) or
+		CheckCondtion(positionX, positionY, 1, 1, "Bi", "Qu", color) or
+		CheckCondtion(positionX, positionY, -1, -1, "Bi", "Qu", color) or
+		CheckCondtion(positionX, positionY, 1, -1, "Bi", "Qu", color) or
+		CheckCondtion(positionX, positionY, -1, 1, "Bi", "Qu", color));
 }
 
 void Board::MinMax(const int& a, const int& b, int& min, int& max) {
@@ -311,3 +330,19 @@ bool Board::ValidCoordinates(const int& x, const int& y)
 }
 
 
+void Board::SetPosition(const int& x, const int& y, const int& option) {
+	switch (option) {
+	case 1:
+		board[x][y] = new Queen(turn, x, y);
+		break;
+	case 2:
+		board[x][y] = new Rook(turn, x, y);
+		break;
+	case 3:
+		board[x][y] = new Knight(turn, x, y);
+		break;
+	case 4:
+		board[x][y] = new Bishop(turn, x, y);
+		break;
+	}
+}

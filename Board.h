@@ -7,6 +7,7 @@ class Board
 	Piece* board[8][8];
 	Color turn;
 	bool isCheck;
+	bool promotePawn;
 	King* whiteKing;
 	King* blackKing;
 	bool leftRookNotMoved[2] = { true, true };
@@ -23,22 +24,30 @@ public:
 	void SwitchTurn();
 	void PrintBoard() const;
 	bool IsCheck(const Color& color) const;
-	
+	bool IsCheck(const Color& color, const int& originX, const int& originY, const int& destinationX, const int& destinationY);
+	bool IsUnderThreat(const Color& color, const int& positionX, const int& positionY) const;
+	void SetPosition(const int& x, const int& y, const int& option);
+
 	static bool ValidCoordinates(const int& x, const int& y);
 
-	const Color GetTurn() const {
-		return turn;
-	}
-	const Piece* GetPosition(const int& x, const int& y) const{
+	const Piece* GetPosition(const int& x, const int& y) const {
 		return board[x][y];
 	}
-	const bool GetIsCheck() const{
+
+	const Color& GetTurn() const {
+		return turn;
+	}
+	const bool& GetIsCheck() const{
 		return isCheck;
+	}
+	const bool& GetPromotePawn() const {
+		return promotePawn;
 	}
 
 	void SetCheck(const bool& isCheck) {
 		this->isCheck = isCheck;
 	}
-
+	void ResetChangePiece() {
+		promotePawn = false;
+	}
 };
-

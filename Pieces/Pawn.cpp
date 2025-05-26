@@ -4,10 +4,28 @@ std::string Pawn::GetRepresentation() const {
 	return "Pa";
 }
 
-bool Pawn::IsValidMove(const int& destinationX, const int& destinationY) const {
-	return 0 <= destinationX and destinationX <= 7 and 0 <= destinationY and destinationY <= 7 and
-		y == destinationY and
-		((color == Color::White and (x - 1 == destinationX or (x == 6 and destinationX == 4))) or
-		(color == Color::Black and (x + 1 == destinationX or (x == 1 and destinationX == 3))))
-		;
+bool Pawn::IsValidMove(const int& destinationX, const int& destinationY, const MoveContext& context) const {
+	return (
+			(
+				color == Color::White and (
+					(
+						x - 1 == destinationX and (
+							(y == destinationY and !context.positionOccupied) or ((y == destinationY - 1 or y == destinationY + 1) and context.positionOccupied)
+						)
+					) or (
+						x == 6 and destinationX == 4 and y == destinationY and !context.positionOccupied
+					)
+				)
+			) or (
+				color == Color::Black and (
+					(
+						x + 1 == destinationX and (
+							(y == destinationY and !context.positionOccupied) or ((y == destinationY - 1 or y == destinationY + 1) and context.positionOccupied)
+						)
+					) or (
+						x == 1 and destinationX == 3 and y == destinationY and !context.positionOccupied
+					)
+				)
+			)
+		);
 }

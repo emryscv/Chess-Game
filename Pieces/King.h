@@ -7,6 +7,6 @@ public:
     King(Color color, int x, int y) : Piece(color, x, y) {}
     std::string GetRepresentation() const override;
     std::pair<int, int> GetCoordinates() const;
-    bool IsValidMove(const int& destinationX, const int& destinationY) const override;
+    bool IsValidMove(const int& destinationX, const int& destinationY, const MoveContext& context) const override;
 };
 
