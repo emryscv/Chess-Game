@@ -29,3 +29,23 @@ bool Pawn::IsValidMove(const int& destinationX, const int& destinationY, const M
 			)
 		);
 }
+
+std::vector<std::pair<int, int>> Pawn::GetAllPosibleMoves() const
+{
+	std::vector<std::pair<int, int>> posibleMoves;
+
+	if (color == Color::White) {
+		posibleMoves.push_back(std::make_pair(x + 1, y));
+		posibleMoves.push_back(std::make_pair(x + 1, y + 1));
+		posibleMoves.push_back(std::make_pair(x + 1, y - 1));
+		if(x == 6) posibleMoves.push_back(std::make_pair(x + 2, y));
+	}
+	else {
+		posibleMoves.push_back(std::make_pair(x - 1, y));
+		posibleMoves.push_back(std::make_pair(x - 1, y + 1));
+		posibleMoves.push_back(std::make_pair(x - 1, y - 1));
+		if (x == 1) posibleMoves.push_back(std::make_pair(x - 2, y));
+	}
+
+	return posibleMoves;
+}

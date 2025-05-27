@@ -4,11 +4,6 @@ std::string King::GetRepresentation() const {
 	return "Ki";
 }
 
-std::pair<int, int> King::GetCoordinates() const
-{
-	return std::make_pair(x, y);
-}
-
 bool King::IsValidMove(const int& destinationX, const int& destinationY, const MoveContext& context) const
 {
 	return (x - 1 == destinationX and (y - 1 == destinationY or y == destinationY or y + 1 == destinationY) or
@@ -18,4 +13,18 @@ bool King::IsValidMove(const int& destinationX, const int& destinationY, const M
 			(context.kingNotMoved and (destinationX == 7 or destinationX == 0) and
 			((destinationY == 6 and context.rightRookNotMoved) or
 			 (destinationY == 2 and context.leftRookNotMoved)));
+}
+
+std::vector<std::pair<int, int>> King::GetAllPosibleMoves() const
+{
+	int dxKing[8] = { -1, -1, 0, 1, 1, 1, 0, -1 };
+	int dyKing[8] = { 0, -1, -1, -1, 0, 1, 1, 1 };
+	std::vector<std::pair<int, int>> posibleMoves;
+
+	for (int i = 0; i < 8; i++) {
+		posibleMoves.push_back(std::make_pair(x + dxKing[i], y + dyKing[i]));
+	}
+
+	return posibleMoves;
+	// TODO: insert return statement here
 }

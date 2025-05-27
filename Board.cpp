@@ -18,7 +18,7 @@ Board::Board() {
 	board[0][1] = new Knight(Color::Black, 0, 1);
 	board[0][2] = new Bishop(Color::Black, 0, 2);
 	board[0][3] = new Queen(Color::Black, 0, 3);
-	board[0][4] = blackKing = new King(Color::Black, 0, 4);
+	board[0][4] = new King(Color::Black, 0, 4);
 	board[0][5] = new Bishop(Color::Black, 0, 5);
 	board[0][6] = new Knight(Color::Black, 0, 6);
 	board[0][7] = new Rook(Color::Black, 0, 7);
@@ -43,12 +43,49 @@ Board::Board() {
 
 	board[7][0] = new Rook(Color::White, 7, 0);
 	board[7][1] = new Knight(Color::White, 7, 1);
-	board[7][2] = new Bishop(Color::White, 3, 1);
-	board[7][3] = new Queen(Color::White, 7, 3);
-	board[7][4] = whiteKing = new King(Color::White, 7, 4);
+	board[7][2] = new Bishop(Color::White, 7, 2);
+	board[5][5] = new Queen(Color::White, 5, 5);
+	board[7][4] = new King(Color::White, 7, 4);
 	board[7][5] = new Bishop(Color::White, 7, 5);
 	board[7][6] = new Knight(Color::White, 7, 6);
 	board[7][7] = new Rook(Color::White, 7, 7);
+
+	blackPieces.push_back(board[0][4]);
+	blackPieces.push_back(board[0][0]);
+	blackPieces.push_back(board[0][1]);
+	blackPieces.push_back(board[0][2]);
+	blackPieces.push_back(board[0][3]);
+	blackPieces.push_back(board[0][5]);
+	blackPieces.push_back(board[0][6]);
+	blackPieces.push_back(board[0][7]);
+
+	blackPieces.push_back(board[1][0]);
+	blackPieces.push_back(board[1][1]);
+	blackPieces.push_back(board[1][2]);
+	blackPieces.push_back(board[1][3]);
+	blackPieces.push_back(board[1][4]);
+	blackPieces.push_back(board[1][5]);
+	blackPieces.push_back(board[1][6]);
+	blackPieces.push_back(board[1][7]);
+
+		
+	whitePieces.push_back(board[7][4]);
+	whitePieces.push_back(board[7][0]);
+	whitePieces.push_back(board[7][1]);
+	whitePieces.push_back(board[7][2]);
+	whitePieces.push_back(board[5][5]);
+	whitePieces.push_back(board[7][5]);
+	whitePieces.push_back(board[7][6]);
+	whitePieces.push_back(board[7][7]);
+	
+	whitePieces.push_back(board[6][0]);
+	whitePieces.push_back(board[6][1]);
+	whitePieces.push_back(board[6][2]);
+	whitePieces.push_back(board[6][3]);
+	whitePieces.push_back(board[6][4]);
+	whitePieces.push_back(board[6][5]);
+	whitePieces.push_back(board[6][6]);
+	whitePieces.push_back(board[6][7]);
 
 	turn = Color::White;
 }
@@ -128,7 +165,18 @@ bool Board::IsValidMove(const int& originX, const int& originY, const int& desti
 void Board::Move(const int& originX, const int& originY, const int& destinationX, const int& destinationY)
 {
 	//add some logic to know the piece is no longer in board
-	if (board[destinationX][destinationY] != nullptr) delete board[destinationX][destinationY];
+	if (board[destinationX][destinationY] != nullptr) {
+		std::vector<Piece*>& pieces = turn == Color::White ? blackPieces : whitePieces;
+		
+		for (int i = 0; i < pieces.size(); i++) {
+			if (pieces[i]->GetCoordinates().first == destinationX and pieces[i]->GetCoordinates().second == destinationY) {
+				pieces.erase(pieces.begin() + i);
+				break;
+			}
+		}
+
+		delete board[destinationX][destinationY];
+	}
 	board[destinationX][destinationY] = board[originX][originY];
 	board[destinationX][destinationY]->SetCoordinates(destinationX, destinationY);
 	board[originX][originY] = nullptr;
@@ -163,6 +211,16 @@ void Board::Move(const int& originX, const int& originY, const int& destinationX
 void Board::SwitchTurn()
 {
 	turn = (turn == Color::White) ? Color::Black : Color::White;
+	std::cout << "\nWhite: ";
+	for (int i = 0; i < whitePieces.size(); i++) {
+		std::cout << whitePieces[i]->GetRepresentation() << " ";
+	}
+	std::cout << "\nBlack: ";
+	for (int i = 0; i < blackPieces.size(); i++) {
+		std::cout << blackPieces[i]->GetRepresentation() << " ";
+	}
+	int option;
+	std::cin >> option;
 }
 
 void Board::PrintBoard() const
@@ -213,7 +271,7 @@ void Board::PrintBoard() const
 
 bool Board::IsCheck(const Color& color) const
 {
-	King* king = color == Color::White ? whiteKing : blackKing;
+	Piece* king = color == Color::White ? whitePieces[0] : blackPieces[0]; //It's king
 	std::pair<int, int> coordinates = king->GetCoordinates();
 
 	return IsUnderThreat(color, coordinates.first, coordinates.second);
@@ -288,6 +346,22 @@ bool Board::IsUnderThreat(const Color& color, const int& positionX, const int& p
 		CheckCondtion(positionX, positionY, -1, -1, "Bi", "Qu", color) or
 		CheckCondtion(positionX, positionY, 1, -1, "Bi", "Qu", color) or
 		CheckCondtion(positionX, positionY, -1, 1, "Bi", "Qu", color));
+}
+
+bool Board::isCheckMate()
+{
+	std::vector<Piece*>& pieces = turn == Color::White ? whitePieces : blackPieces;
+
+	for (Piece* piece : pieces) {
+		std::vector<std::pair<int, int>> posibleMoves = piece->GetAllPosibleMoves();
+		for (int i = 0; i < posibleMoves.size(); i++) {
+			std::pair<int, int> coordinates = piece->GetCoordinates();
+			std::cout << posibleMoves[i].first << " " << posibleMoves[i].second << " " << piece->GetRepresentation() << "\n";
+			if (IsValidMove(coordinates.first, coordinates.second, posibleMoves[i].first, posibleMoves[i].second)) return false;
+		}
+	}
+
+	return true;
 }
 
 void Board::MinMax(const int& a, const int& b, int& min, int& max) {

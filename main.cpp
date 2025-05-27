@@ -60,10 +60,17 @@ int main(void)
 
 		if (board.GetIsCheck()) board.SetCheck(false);
 
-		if (board.IsCheck(board.GetTurn() == Color::White ? Color::Black : Color::White)){
-			board.SetCheck(true);
-		}
 		board.SwitchTurn();
+	
+		if (board.IsCheck(board.GetTurn())){
+			board.SetCheck(true);
+			if (board.isCheckMate()) {
+				system("cls");
+				std::cout << "Check Mate!!";
+				std::cin >> destinationX;
+			}
+		}
+
 	}
 	return 0;
 }
