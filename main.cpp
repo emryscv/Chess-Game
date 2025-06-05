@@ -1,76 +1,105 @@
-#include <GLFW/glfw3.h>
-#include "Board.h"
-#include "iostream"
-#include "Pieces/Queen.h"
-#include "Pieces/Rook.h"
-#include "Pieces/Knight.h"
-#include "Pieces/Bishop.h"
+#include <iostream>
+#include <chrono>
 
-int main(void)
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "UI/UI.h";
+#include "UI/Texture.h";
+#include "UI/shaderClass.h";
+#include "UI/VAO.h";
+#include "UI/VBO.h";
+#include "UI/EBO.h";
+
+#include "Engine/Game.h"
+
+
+GLfloat vertices[] =
+{ //    COORDINATES      / TEX COORD /
+	 -1.0f,  -1.0f, 0.0f, 0.0f, 0.0f, // Lower left corner
+	 -1.0f, -0.75f, 0.0f, 0.0f, 1.0f, // Lower right corner
+	-0.75f, -0.75f, 0.0f, 1.0f, 1.0f, // Upper corner
+	-0.75f,  -1.0f, 0.0f, 1.0f, 0.0f, // Inner left
+	 };
+
+GLuint indices[] =
 {
-	Board board;
+	0, 2, 1, // Upper triangle
+	0, 3, 2, // Upper triangle
+};
 
-	for (;;) {
-		system("cls");
-		board.PrintBoard();
+int main() {
+	double mouseX;
+	double mouseY;
 
-		std::cout << "Current Turn: " << (board.GetTurn() == Color::White ? "White" : "Black") << "\n";
-		if (board.GetIsCheck()) std::cout << "Check\n";
+	double originX;
+	double originY;
 
-		int originX;
-		int originY;
-		int destinationX;
-		int destinationY;
-		bool invalid = true;
-		while (invalid) {
-			std::cout << "Select a piece\n";
-			std::cout << "Enter row: ";
-			std::cin >> originX;
-			std::cout << "Enter col: ";
-			std::cin >> originY;
-			if (Board::ValidCoordinates(originX, originY) and board.GetPosition(originX, originY) != nullptr and board.GetPosition(originX, originY)->GetColor() == board.GetTurn()) invalid = false;
-			else {
-				std::cout << "Not one of your pieces!!\n";
+	double destinationX;
+	double destinationY;
+
+	bool isDragging = false;
+
+	UI ui(vertices, sizeof(vertices), indices, sizeof(indices));
+	Game game;
+	ui.GenerateBoardRepresentation(game.GetBoard());
+
+	//Render loop
+	while (!glfwWindowShouldClose(ui.window()))
+	{
+		auto start = std::chrono::high_resolution_clock::now();
+
+		ui.PrintBoard();
+
+		if (glfwGetMouseButton(ui.window(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			glfwSetInputMode(ui.window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+			glfwGetCursorPos(ui.window(), &mouseX, &mouseY);
+
+			std::cout << mouseX << " " << mouseY << "\n";
+			if (!isDragging and game.IsValidPiece(mouseX / 100, mouseY / 100)) {
+				isDragging = true;
+				originX = mouseX / 100;
+				originY = mouseY / 100;
+				ui.SetMovingPiece(mouseX, mouseY);
+			}
+
+			if (isDragging) { 
+				ui.UpdatePosition(mouseX, mouseY); 
 			}
 		}
 
-		invalid = true;
-		while (invalid) {
-			std::cout << "Select a destination\n";
-			std::cout << "Enter row: ";
-			std::cin >> destinationX;
-			std::cout << "Enter col: ";
-			std::cin >> destinationY;
-			if (board.IsValidMove(originX, originY, destinationX, destinationY)) invalid = false;
-			else {
-				std::cout << "Not a valid move!!\n"; 
+		if (glfwGetMouseButton(ui.window(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
+			glfwSetInputMode(ui.window(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			if (isDragging) {
+				glfwGetCursorPos(ui.window(), &mouseX, &mouseY);
+
+				destinationX = mouseX/ 100;
+				destinationY = mouseY/ 100;
+				
+				if (game.IsAValidMove(originX, originY, destinationX, destinationY)) {
+
+					game.Move(originX, originY, destinationX, destinationY);
+					ui.GenerateBoardRepresentation(game.GetBoard());
+					ui.UnsetMovingPiece();
+				}
+				else {
+					ui.UnsetMovingPiece(originX, originY);
+				}
 			}
+			isDragging = false;
 		}
 
-		board.Move(originX, originY, destinationX, destinationY);
-		
-		if (board.GetPromotePawn()) {
-			int option;
-			std::cout << "Pick one:\n1. Queen\n2. Rook\n3. Knight\n4. Bishop\n";
-			std::cin >> option;
-			
-			board.SetPosition(destinationX, destinationY, option);
-			board.ResetChangePiece();
-		}
+		glfwSwapBuffers(ui.window());
+		glfwPollEvents();
 
-		if (board.GetIsCheck()) board.SetCheck(false);
+		auto end = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-		board.SwitchTurn();
-	
-		if (board.IsCheck(board.GetTurn())){
-			board.SetCheck(true);
-			if (board.isCheckMate()) {
-				system("cls");
-				std::cout << "Check Mate!!";
-				std::cin >> destinationX;
-			}
-		}
-
+		//std::cout << "Time taken: " << duration.count() << " ms" << std::endl;
 	}
+
+	ui.DeleteTextures();
+
 	return 0;
 }

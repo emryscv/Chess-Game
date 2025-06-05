@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{c39ba829-afed-4069-92d0-fa178e91cd6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Textures">
+      <UniqueIdentifier>{64bd76ae-8b37-42d6-bfbb-7d8bdf8f4c57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Pieces">
+      <UniqueIdentifier>{1efe7e64-d8b7-4f39-94f7-dd0375c91594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{81ded8ff-9d56-47cc-bc57-82ba4a63dd9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Pieces">
+      <UniqueIdentifier>{61dc115c-0dc1-452f-b6a5-1dab7357a670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{6ce18537-4131-498e-9c26-4718c1b30d1f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Board.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\glad.c">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\EBO.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\shaderClass.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\stb.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Texture.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\VAO.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\VBO.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pieces\Bishop.cpp">
+      <Filter>Source Files\Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pieces\King.cpp">
+      <Filter>Source Files\Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pieces\Knight.cpp">
+      <Filter>Source Files\Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pieces\Pawn.cpp">
+      <Filter>Source Files\Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pieces\Queen.cpp">
+      <Filter>Source Files\Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pieces\Rook.cpp">
+      <Filter>Source Files\Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\Board.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\MoveContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\EBO.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\shaderClass.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Texture.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\VAO.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\VBO.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pieces\Bishop.h">
+      <Filter>Header Files\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pieces\King.h">
+      <Filter>Header Files\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pieces\Knight.h">
+      <Filter>Header Files\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pieces\Pawn.h">
+      <Filter>Header Files\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pieces\Piece.h">
+      <Filter>Header Files\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pieces\Queen.h">
+      <Filter>Header Files\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pieces\Rook.h">
+      <Filter>Header Files\Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UI\Shaders\default.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="UI\Shaders\default.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="UI\Shaders\color.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\chess_bishop.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Assets\chess_king.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Assets\chess_knight.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Assets\chess_pawn.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Assets\chess_queen.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Assets\chess_rook.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Assets\d3.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
