@@ -65,8 +65,6 @@ void UI::PrintBoard()
 	mBoardShaderProgram.Activate();
 	mSquareVAO.Bind();
 
-	glUniform4f(mBoardAColor, 0.0f, 0.0f, 0.0f, 1.0f);
-
 	glm::mat4 trans = glm::mat4(1.0f);
 
 	for (int i = 0; i < 8; i++)
@@ -130,6 +128,56 @@ void UI::PrintBoard()
 		glUniformMatrix4fv(mPieceTransform, 1, GL_FALSE, glm::value_ptr(trans));
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
+
+	mSquareVAO.Unbind();
+}
+
+void UI::PrintPromoteMenu(int x, int y, Color turn)
+{
+	y += 4;
+	mBoardShaderProgram.Activate();
+	mSquareVAO.Bind();
+
+	glUniform4f(mBoardAColor, 0.8f, 0.8f, 0.8f, 1.0f);
+
+	glm::mat4 trans = glm::mat4(1.0f);
+
+	trans = glm::scale(trans, glm::vec3(1.0f, 4.3f, 1.0f));
+	trans = glm::translate(trans, glm::vec3(x * 0.25f, y * 0.25f, 0.0f));
+
+
+	glUniformMatrix4fv(mBoardTransform, 1, GL_FALSE, glm::value_ptr(trans));
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	mPiecesShaderProgram.Activate();
+
+	if (turn == Color::White) {
+		glUniform4f(mPieceAColor, 1.0f, 1.0f, 1.0f, 1.0f);
+	}
+	else {
+		glUniform4f(mPieceAColor, 0.0f, 0.0f, 0.0f, 1.0f);
+	}
+
+	mTextures[5].Bind();
+	trans = glm::mat4(1.0f);
+	trans = glm::translate(trans, glm::vec3(x * 0.25f, (y + 3) * 0.25f, 0.0f));
+	glUniformMatrix4fv(mPieceTransform, 1, GL_FALSE, glm::value_ptr(trans));
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	mTextures[4].Bind();
+	trans = glm::mat4(1.0f);
+	trans = glm::translate(trans, glm::vec3(x * 0.25f, (y + 2) * 0.25f, 0.0f));
+	glUniformMatrix4fv(mPieceTransform, 1, GL_FALSE, glm::value_ptr(trans));
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	mTextures[3].Bind();
+	trans = glm::mat4(1.0f);
+	trans = glm::translate(trans, glm::vec3(x * 0.25f, (y + 1) * 0.25f, 0.0f));
+	glUniformMatrix4fv(mPieceTransform, 1, GL_FALSE, glm::value_ptr(trans));
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	mTextures[2].Bind();
+	trans = glm::mat4(1.0f);
+	trans = glm::translate(trans, glm::vec3(x * 0.25f, y * 0.25f, 0.0f));
+	glUniformMatrix4fv(mPieceTransform, 1, GL_FALSE, glm::value_ptr(trans));
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	mSquareVAO.Unbind();
 }

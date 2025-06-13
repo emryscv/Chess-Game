@@ -53,6 +53,7 @@ public:
 	~UI();
 
 	void PrintBoard();
+	void PrintPromoteMenu(int x, int y, Color turn);
 	void LoadTextures();
 	void DeleteTextures();
 	void GenerateBoardRepresentation(Piece* const(&board)[8][8]);

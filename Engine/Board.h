@@ -5,11 +5,9 @@
 class Board
 {
 	Piece* board[8][8];
-	Color turn;
-	bool isCheck;
-	bool promotePawn;
 	std::vector<Piece*> whitePieces;
 	std::vector<Piece*> blackPieces;
+	bool promotePawn;
 	bool leftRookNotMoved[2] = { true, true };
 	bool rightRookNotMoved[2] = { true, true };
 	bool kingNotMoved[2] = {true, true};
@@ -19,16 +17,15 @@ class Board
 	
 public:
 	Board();
-	bool IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinationY);
-	void Move(const int& originX, const int& originY, const int& destinationX, const int& destinationY);
-	void SwitchTurn();
+	bool IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinationY, Color turn);
+	void Move(const int& originX, const int& originY, const int& destinationX, const int& destinationY, Color turn);
 	void PrintBoard() const;
 	bool IsCheck(const Color& color) const;
 	bool IsCheck(const Color& color, const int& originX, const int& originY, const int& destinationX, const int& destinationY);
 	bool IsUnderThreat(const Color& color, const int& positionX, const int& positionY) const;
-	bool isCheckMate();
+	bool IsCheckMate(Color turn);
 
-	void SetPosition(const int& x, const int& y, const int& option);
+	void SetPosition(const int& x, const int& y, const int& option, Color color);
 
 	static bool ValidCoordinates(const int& x, const int& y);
 
@@ -40,20 +37,11 @@ public:
 		return board[x][y];
 	}
 
-	const Color& GetTurn() const {
-		return turn;
-	}
-	const bool& GetIsCheck() const{
-		return isCheck;
-	}
 	const bool& GetPromotePawn() const {
 		return promotePawn;
 	}
 
-	void SetCheck(const bool& isCheck) {
-		this->isCheck = isCheck;
-	}
-	void ResetChangePiece() {
+	void ResetPromotePawn() {
 		promotePawn = false;
 	}
 };

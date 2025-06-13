@@ -33,11 +33,13 @@ int main() {
 	double mouseX;
 	double mouseY;
 
-	double originX;
-	double originY;
+	int originX;
+	int originY;
 
-	double destinationX;
-	double destinationY;
+	int destinationX;
+	int destinationY;
+
+	int promoteOption = -1;
 
 	bool isDragging = false;
 
@@ -51,13 +53,31 @@ int main() {
 		auto start = std::chrono::high_resolution_clock::now();
 
 		ui.PrintBoard();
+		if (game.GetPromotePawn()) {
+			ui.PrintPromoteMenu(destinationX, 0, game.GetTurn());
+			if (promoteOption != -1) {
+				std::cout << "Common common turn the radio on!\n";
+				game.PromotePawn(destinationX, destinationY, promoteOption + 1);
+				promoteOption = -1;
+				game.AfterMove();
+				ui.GenerateBoardRepresentation(game.GetBoard());
+			}
+		}
 
 		if (glfwGetMouseButton(ui.window(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 			glfwSetInputMode(ui.window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 			glfwGetCursorPos(ui.window(), &mouseX, &mouseY);
 
-			std::cout << mouseX << " " << mouseY << "\n";
-			if (!isDragging and game.IsValidPiece(mouseX / 100, mouseY / 100)) {
+			//std::cout << mouseX << " " << mouseY << "\n";
+
+			if (game.GetPromotePawn()) {
+				std::cout << mouseX / 100 << " " << (int)(mouseY / 100) << "\n";
+				if ((int)(mouseX / 100) == destinationX and (int) (mouseY / 100) >= 0 and (int)(mouseY / 100) <= 3) {
+					promoteOption = mouseY / 100;
+					std::cout << "YES!!!!\n";
+				}
+			}
+			else if (!isDragging and game.IsValidPiece(mouseX / 100, mouseY / 100)) {
 				isDragging = true;
 				originX = mouseX / 100;
 				originY = mouseY / 100;
@@ -78,8 +98,12 @@ int main() {
 				destinationY = mouseY/ 100;
 				
 				if (game.IsAValidMove(originX, originY, destinationX, destinationY)) {
-
 					game.Move(originX, originY, destinationX, destinationY);
+					
+					if (!game.GetPromotePawn()) {
+						game.AfterMove();
+					}
+
 					ui.GenerateBoardRepresentation(game.GetBoard());
 					ui.UnsetMovingPiece();
 				}

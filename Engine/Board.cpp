@@ -85,11 +85,9 @@ Board::Board() {
 	whitePieces.push_back(board[6][5]);
 	whitePieces.push_back(board[6][6]);
 	whitePieces.push_back(board[6][7]);
-
-	turn = Color::White;
 }
 
-bool Board::IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinationY)
+bool Board::IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinationY, Color turn)
 {
 	//check for x and y in board
 	if (!ValidCoordinates(destinationX, destinationY)) return false;
@@ -161,7 +159,7 @@ bool Board::IsValidMove(const int& originX, const int& originY, const int& desti
 	return false;
 }
 
-void Board::Move(const int& originX, const int& originY, const int& destinationX, const int& destinationY)
+void Board::Move(const int& originX, const int& originY, const int& destinationX, const int& destinationY, Color turn)
 {
 	//add some logic to know the piece is no longer in board
 	if (board[destinationX][destinationY] != nullptr) {
@@ -184,10 +182,10 @@ void Board::Move(const int& originX, const int& originY, const int& destinationX
 
 	if (board[destinationX][destinationY]->GetRepresentation() == "Ki" and kingNotMoved[turn] and (destinationX == 7 or destinationX == 0)) {
 		if (destinationY == 6 and rightRookNotMoved[turn]) {
-			Move(destinationX, 7, destinationX, 5);
+			Move(destinationX, 7, destinationX, 5, turn);
 		}
 		else if (destinationY == 2 and leftRookNotMoved[turn]) {
-			Move(destinationX, 0, destinationX, 3);
+			Move(destinationX, 0, destinationX, 3, turn);
 		}
 	}
 
@@ -205,11 +203,6 @@ void Board::Move(const int& originX, const int& originY, const int& destinationX
 	else if (representation == "Pa" and (destinationX == 0 or destinationX == 7)) {
 		promotePawn = true;
 	}
-}
-
-void Board::SwitchTurn()
-{
-	turn = (turn == Color::White) ? Color::Black : Color::White;
 }
 
 void Board::PrintBoard() const
@@ -337,7 +330,7 @@ bool Board::IsUnderThreat(const Color& color, const int& positionX, const int& p
 		CheckCondtion(positionX, positionY, -1, 1, "Bi", "Qu", color));
 }
 
-bool Board::isCheckMate()
+bool Board::IsCheckMate(Color turn)
 {
 	std::vector<Piece*>& pieces = turn == Color::White ? whitePieces : blackPieces;
 
@@ -346,7 +339,7 @@ bool Board::isCheckMate()
 		for (int i = 0; i < posibleMoves.size(); i++) {
 			std::pair<int, int> coordinates = piece->GetCoordinates();
 			std::cout << posibleMoves[i].first << " " << posibleMoves[i].second << " " << piece->GetRepresentation() << "\n";
-			if (IsValidMove(coordinates.first, coordinates.second, posibleMoves[i].first, posibleMoves[i].second)) return false;
+			if (IsValidMove(coordinates.first, coordinates.second, posibleMoves[i].first, posibleMoves[i].second, turn)) return false;
 		}
 	}
 
@@ -393,19 +386,24 @@ bool Board::ValidCoordinates(const int& x, const int& y)
 }
 
 
-void Board::SetPosition(const int& x, const int& y, const int& option) {
+void Board::SetPosition(const int& x, const int& y, const int& option, Color color) {
+	std::cout << x << " " << y << " " << option << " ";
 	switch (option) {
 	case 1:
-		board[x][y] = new Queen(turn, x, y);
+		std::cout << 1 << "\n";
+		board[x][y] = new Queen(color, x, y);
 		break;
 	case 2:
-		board[x][y] = new Rook(turn, x, y);
+		std::cout << 2 << "\n";
+		board[x][y] = new Rook(color, x, y);
 		break;
 	case 3:
-		board[x][y] = new Knight(turn, x, y);
+		std::cout << 3 << "\n";
+		board[x][y] = new Bishop(color, x, y);
 		break;
 	case 4:
-		board[x][y] = new Bishop(turn, x, y);
+		std::cout << 4 << "\n";
+		board[x][y] = new Knight(color, x, y);
 		break;
 	}
 }
