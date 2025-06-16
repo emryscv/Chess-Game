@@ -8,7 +8,7 @@ bool Queen::IsValidMove(const int& destinationX, const int& destinationY, const 
 	return (x == destinationX or y == destinationY or x - y == destinationX - destinationY or x - destinationX == destinationY - y);
 }
 
-std::vector<std::pair<int, int>> Queen::GetAllPosibleMoves() const
+std::vector<std::pair<int, int>> Queen::GetAllPossibleMoves() const
 {
 	std::vector<std::pair<int, int>> posibleMoves;
 

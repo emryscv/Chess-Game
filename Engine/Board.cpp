@@ -335,7 +335,7 @@ bool Board::IsCheckMate(Color turn)
 	std::vector<Piece*>& pieces = turn == Color::White ? whitePieces : blackPieces;
 
  	for (Piece* piece : pieces) {
-		std::vector<std::pair<int, int>> posibleMoves = piece->GetAllPosibleMoves();
+		std::vector<std::pair<int, int>> posibleMoves = piece->GetAllPossibleMoves();
 		for (int i = 0; i < posibleMoves.size(); i++) {
 			std::pair<int, int> coordinates = piece->GetCoordinates();
 			std::cout << posibleMoves[i].first << " " << posibleMoves[i].second << " " << piece->GetRepresentation() << "\n";

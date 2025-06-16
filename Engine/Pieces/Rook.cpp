@@ -8,7 +8,7 @@ bool Rook::IsValidMove(const int& destinationX, const int& destinationY, const M
 	return (x == destinationX or y == destinationY);
 }
 
-std::vector<std::pair<int, int>> Rook::GetAllPosibleMoves() const
+std::vector<std::pair<int, int>> Rook::GetAllPossibleMoves() const
 {
 	std::vector<std::pair<int, int>> posibleMoves;
 

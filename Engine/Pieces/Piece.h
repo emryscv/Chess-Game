@@ -38,6 +38,6 @@ public:
 
 	virtual std::string GetRepresentation() const = 0;
 	virtual bool IsValidMove(const int& destinationX, const int& destinationY, const MoveContext& context) const = 0;
-	virtual std::vector<std::pair<int, int>> GetAllPosibleMoves() const = 0;
+	virtual std::vector<std::pair<int, int>> GetAllPossibleMoves() const = 0;
 };
 

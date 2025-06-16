@@ -14,7 +14,6 @@
 
 #include "Engine/Game.h"
 
-
 GLfloat vertices[] =
 { //    COORDINATES      / TEX COORD /
 	 -1.0f,  -1.0f, 0.0f, 0.0f, 0.0f, // Lower left corner

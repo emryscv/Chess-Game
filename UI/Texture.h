@@ -8,11 +8,14 @@
 
 class Texture
 {
+	void TextureSetUp(unsigned char* bytes, GLint internalFormat, GLsizei  width, GLsizei height, GLenum slot, GLenum format, GLenum pixelType, GLenum filter, GLenum wraper);
+
 public:
 	GLuint ID;
 	GLenum type;
 	Texture() : ID(0), type(GL_TEXTURE_2D) {}
-	Texture(const char* image, GLenum texType, GLenum slot, GLenum format, GLenum pixelType);
+	Texture(const char* image, GLenum texType);
+	Texture(const char* image, GLenum texType);
 
 	void texUnit(Shader shader, const char* uniform, GLuint unit);
 	void Bind();

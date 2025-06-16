@@ -84,6 +84,9 @@
     <ClCompile Include="Engine\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TextGenerator.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Board.h">
@@ -134,6 +137,9 @@
     <ClInclude Include="Engine\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TextGenerator.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Shaders\default.frag">
@@ -143,6 +149,9 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="UI\Shaders\color.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="text.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

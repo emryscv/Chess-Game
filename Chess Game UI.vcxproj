@@ -78,6 +78,14 @@
     <IncludePath>D:\Full Sail\PG2\Repos\Chess Game UI\Libraries\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Full Sail\PG2\Repos\Chess Game UI\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>D:\Full Sail\PG2\Repos\Chess Game UI\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Full Sail\PG2\Repos\Chess Game UI\Libraries\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>D:\Full Sail\PG2\Repos\Chess Game UI\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Full Sail\PG2\Repos\Chess Game UI\Libraries\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -105,6 +113,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>freetype.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -134,6 +143,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>freetype.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -146,6 +156,7 @@
     <ClCompile Include="Engine\Pieces\Queen.cpp" />
     <ClCompile Include="Engine\Pieces\Rook.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TextGenerator.cpp" />
     <ClCompile Include="UI\EBO.cpp" />
     <ClCompile Include="UI\glad.c" />
     <ClCompile Include="UI\shaderClass.cpp" />
@@ -166,6 +177,7 @@
     <ClInclude Include="Engine\Pieces\Piece.h" />
     <ClInclude Include="Engine\Pieces\Queen.h" />
     <ClInclude Include="Engine\Pieces\Rook.h" />
+    <ClInclude Include="TextGenerator.h" />
     <ClInclude Include="UI\EBO.h" />
     <ClInclude Include="UI\shaderClass.h" />
     <ClInclude Include="UI\Texture.h" />
@@ -174,6 +186,7 @@
     <ClInclude Include="UI\VBO.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="text.frag" />
     <None Include="UI\Shaders\color.frag" />
     <None Include="UI\Shaders\default.frag" />
     <None Include="UI\Shaders\default.vert" />

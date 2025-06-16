@@ -9,7 +9,7 @@ bool Bishop::IsValidMove(const int& destinationX, const int& destinationY, const
 	return (x - y == destinationX - destinationY or x - destinationX == destinationY - y);
 }
 
-std::vector<std::pair<int, int>> Bishop::GetAllPosibleMoves() const
+std::vector<std::pair<int, int>> Bishop::GetAllPossibleMoves() const
 {
 	std::vector<std::pair<int, int>> posibleMoves;
 

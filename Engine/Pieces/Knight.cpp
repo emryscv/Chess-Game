@@ -11,15 +11,15 @@ bool Knight::IsValidMove(const int& destinationX, const int& destinationY, const
 		    y + 2 == destinationY and (x + 1 == destinationX or x - 1 == destinationX));
 }
 
-std::vector<std::pair<int, int>> Knight::GetAllPosibleMoves() const
+std::vector<std::pair<int, int>> Knight::GetAllPossibleMoves() const
 {
 	int dxKnight[8] = { -2, -1, 1, 2, 2, 1, -1, -2 };
 	int dyKnight[8] = { -1, -2, -2, -1, 1, 2, 2, 1 };
-	std::vector<std::pair<int, int>> posibleMoves;
+	std::vector<std::pair<int, int>> possibleMoves;
 
 	for (int i = 0; i < 8; i++) {
-		posibleMoves.push_back(std::make_pair(x + dxKnight[i], y + dyKnight[i]));
+		possibleMoves.push_back(std::make_pair(x + dxKnight[i], y + dyKnight[i]));
 	}
 
-	return posibleMoves;
+	return possibleMoves;
 }

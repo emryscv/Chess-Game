@@ -184,22 +184,22 @@ void UI::PrintPromoteMenu(int x, int y, Color turn)
 
 void UI::LoadTextures()
 {
-	Texture pawn("Assets/chess_pawn.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture pawn("Assets/chess_pawn.png", GL_TEXTURE_2D);
 	pawn.texUnit(mPiecesShaderProgram, "text0", 0);
 
-	Texture knight("Assets/chess_knight.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture knight("Assets/chess_knight.png", GL_TEXTURE_2D);
 	knight.texUnit(mPiecesShaderProgram, "text0", 0);
 
-	Texture bishop("Assets/chess_bishop.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture bishop("Assets/chess_bishop.png", GL_TEXTURE_2D);
 	bishop.texUnit(mPiecesShaderProgram, "text0", 0);
 
-	Texture rook("Assets/chess_rook.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture rook("Assets/chess_rook.png", GL_TEXTURE_2D);
 	rook.texUnit(mPiecesShaderProgram, "text0", 0);
 
-	Texture queen("Assets/chess_queen.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture queen("Assets/chess_queen.png", GL_TEXTURE_2D);
 	queen.texUnit(mPiecesShaderProgram, "text0", 0);
 
-	Texture king("Assets/chess_king.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture king("Assets/chess_king.png", GL_TEXTURE_2D);
 	king.texUnit(mPiecesShaderProgram, "text0", 0);
 
 	mTextures[1] = pawn;

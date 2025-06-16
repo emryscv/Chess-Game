@@ -30,7 +30,7 @@ bool Pawn::IsValidMove(const int& destinationX, const int& destinationY, const M
 		);
 }
 
-std::vector<std::pair<int, int>> Pawn::GetAllPosibleMoves() const
+std::vector<std::pair<int, int>> Pawn::GetAllPossibleMoves() const
 {
 	std::vector<std::pair<int, int>> posibleMoves;
 

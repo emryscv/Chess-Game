@@ -15,7 +15,7 @@
 #include "shaderClass.h"
 #include "Texture.h"
 
-#include "../Engine/Pieces/Piece.h"; //TODO quitar esto
+#include "../Engine/Pieces/Piece.h";
 
 struct MovingPiece {
 	int representation;
