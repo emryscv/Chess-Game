@@ -1,5 +1,7 @@
 #include <iostream>
 #include <chrono>
+#include <windows.h>
+#include <mmsystem.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,6 +30,19 @@ GLuint indices[] =
 	0, 3, 2, // Upper triangle
 };
 
+
+std::vector<char> LoadFileToBuffer(const char* filename) {
+	std::ifstream file(filename, std::ios::binary | std::ios::ate);
+	std::vector<char> buffer;
+	if (file) {
+		std::streamsize size = file.tellg();
+		file.seekg(0, std::ios::beg);
+		buffer.resize(size);
+		file.read(buffer.data(), size);
+	}
+	return buffer;
+}
+
 int main() {
 	double mouseX;
 	double mouseY;
@@ -41,6 +56,9 @@ int main() {
 	int promoteOption = -1;
 
 	bool isDragging = false;
+	
+	std::vector<char> move = LoadFileToBuffer("Assets/move-self.wav");
+	std::vector<char> capture = LoadFileToBuffer("Assets/capture.wav");
 
 	UI ui(vertices, sizeof(vertices), indices, sizeof(indices));
 	Game game;
@@ -52,72 +70,81 @@ int main() {
 		auto start = std::chrono::high_resolution_clock::now();
 
 		ui.PrintBoard();
-		if (game.GetPromotePawn()) {
-			ui.PrintPromoteMenu(destinationX, 0, game.GetTurn());
-			if (promoteOption != -1) {
-				std::cout << "Common common turn the radio on!\n";
-				game.PromotePawn(destinationX, destinationY, promoteOption + 1);
-				promoteOption = -1;
-				game.AfterMove();
-				ui.GenerateBoardRepresentation(game.GetBoard());
-			}
+		
+		if (game.GetIsCheckMate()) {
+			ui.PrintCheckMate();
 		}
-
-		if (glfwGetMouseButton(ui.window(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-			glfwSetInputMode(ui.window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-			glfwGetCursorPos(ui.window(), &mouseX, &mouseY);
-
-			//std::cout << mouseX << " " << mouseY << "\n";
-
+		else {
 			if (game.GetPromotePawn()) {
-				std::cout << mouseX / 100 << " " << (int)(mouseY / 100) << "\n";
-				if ((int)(mouseX / 100) == destinationX and (int) (mouseY / 100) >= 0 and (int)(mouseY / 100) <= 3) {
-					promoteOption = mouseY / 100;
-					std::cout << "YES!!!!\n";
+				ui.PrintPromoteMenu(destinationX, 0, game.GetTurn());
+				if (promoteOption != -1) {
+					game.PromotePawn(destinationX, destinationY, promoteOption + 1);
+					promoteOption = -1;
+					game.AfterMove();
+					ui.GenerateBoardRepresentation(game.GetBoard());
 				}
 			}
-			else if (!isDragging and game.IsValidPiece(mouseX / 100, mouseY / 100)) {
-				isDragging = true;
-				originX = mouseX / 100;
-				originY = mouseY / 100;
-				ui.SetMovingPiece(mouseX, mouseY);
-			}
 
-			if (isDragging) { 
-				ui.UpdatePosition(mouseX, mouseY); 
-			}
-		}
-
-		if (glfwGetMouseButton(ui.window(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
-			glfwSetInputMode(ui.window(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			if (isDragging) {
+			if (glfwGetMouseButton(ui.window(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+				glfwSetInputMode(ui.window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 				glfwGetCursorPos(ui.window(), &mouseX, &mouseY);
 
-				destinationX = mouseX/ 100;
-				destinationY = mouseY/ 100;
-				
-				if (game.IsAValidMove(originX, originY, destinationX, destinationY)) {
-					game.Move(originX, originY, destinationX, destinationY);
-					
-					if (!game.GetPromotePawn()) {
-						game.AfterMove();
-					}
+				//std::cout << mouseX << " " << mouseY << "\n";
 
-					ui.GenerateBoardRepresentation(game.GetBoard());
-					ui.UnsetMovingPiece();
+				if (game.GetPromotePawn()) {
+					std::cout << mouseX / 100 << " " << (int)(mouseY / 100) << "\n";
+					if ((int)(mouseX / 100) == destinationX and (int)(mouseY / 100) >= 0 and (int)(mouseY / 100) <= 3) {
+						promoteOption = mouseY / 100;
+					}
 				}
-				else {
-					ui.UnsetMovingPiece(originX, originY);
+				else if (!isDragging and game.IsValidPiece(mouseX / 100, mouseY / 100)) {
+					isDragging = true;
+					originX = mouseX / 100;
+					originY = mouseY / 100;
+					ui.SetMovingPiece(mouseX, mouseY);
+				}
+
+				if (isDragging) {
+					ui.UpdatePosition(mouseX, mouseY);
 				}
 			}
-			isDragging = false;
-		}
 
+			if (glfwGetMouseButton(ui.window(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
+				glfwSetInputMode(ui.window(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				if (isDragging) {
+					glfwGetCursorPos(ui.window(), &mouseX, &mouseY);
+
+					destinationX = mouseX / 100;
+					destinationY = mouseY / 100;
+
+					if (game.IsAValidMove(originX, originY, destinationX, destinationY)) {
+						if (game.Move(originX, originY, destinationX, destinationY)) {
+							PlaySoundA(reinterpret_cast<LPCSTR>(capture.data()), NULL, SND_MEMORY | SND_ASYNC);		
+						}
+						else {
+							PlaySoundA(reinterpret_cast<LPCSTR>(move.data()), NULL, SND_MEMORY | SND_ASYNC);
+						}
+						
+						//PlaySound((capture.c_str()), NULL, SND_SYNC);
+						ui.GenerateBoardRepresentation(game.GetBoard());
+						ui.UnsetMovingPiece();
+
+						if (!game.GetPromotePawn()) {
+							game.AfterMove();
+						}
+					}
+					else {
+						ui.UnsetMovingPiece(originX, originY);
+					}
+				}
+				isDragging = false;
+			}
+		}
 		glfwSwapBuffers(ui.window());
 		glfwPollEvents();
 
-		auto end = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+		//auto end = std::chrono::high_resolution_clock::now();
+		//auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
 		//std::cout << "Time taken: " << duration.count() << " ms" << std::endl;
 	}

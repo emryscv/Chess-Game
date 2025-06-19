@@ -18,7 +18,7 @@ class Board
 public:
 	Board();
 	bool IsValidMove(const int& originX, const int& originY, const int& destinationX, const int& destinationY, Color turn);
-	void Move(const int& originX, const int& originY, const int& destinationX, const int& destinationY, Color turn);
+	bool Move(const int& originX, const int& originY, const int& destinationX, const int& destinationY, Color turn);
 	void PrintBoard() const;
 	bool IsCheck(const Color& color) const;
 	bool IsCheck(const Color& color, const int& originX, const int& originY, const int& destinationX, const int& destinationY);

@@ -159,8 +159,9 @@ bool Board::IsValidMove(const int& originX, const int& originY, const int& desti
 	return false;
 }
 
-void Board::Move(const int& originX, const int& originY, const int& destinationX, const int& destinationY, Color turn)
+bool Board::Move(const int& originX, const int& originY, const int& destinationX, const int& destinationY, Color turn)
 {
+	bool capture = false;
 	//add some logic to know the piece is no longer in board
 	if (board[destinationX][destinationY] != nullptr) {
 		std::vector<Piece*>& pieces = turn == Color::White ? blackPieces : whitePieces;
@@ -173,6 +174,7 @@ void Board::Move(const int& originX, const int& originY, const int& destinationX
 		}
 
 		delete board[destinationX][destinationY];
+		capture = true;
 	}
 	board[destinationX][destinationY] = board[originX][originY];
 	board[destinationX][destinationY]->SetCoordinates(destinationX, destinationY);
@@ -203,6 +205,8 @@ void Board::Move(const int& originX, const int& originY, const int& destinationX
 	else if (representation == "Pa" and (destinationX == 0 or destinationX == 7)) {
 		promotePawn = true;
 	}
+
+	return capture;
 }
 
 void Board::PrintBoard() const

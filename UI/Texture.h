@@ -3,6 +3,8 @@
 
 #include <glad/glad.h>
 #include <stb/stb_image.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H 
 
 #include "shaderClass.h"
 
@@ -15,12 +17,14 @@ public:
 	GLenum type;
 	Texture() : ID(0), type(GL_TEXTURE_2D) {}
 	Texture(const char* image, GLenum texType);
-	Texture(const char* image, GLenum texType);
+	Texture(FT_Face face, GLenum texType);
 
 	void texUnit(Shader shader, const char* uniform, GLuint unit);
 	void Bind();
 	void Unbind();
 	void Delete();
+
+	static void Unbind(GLenum type);
 };
 
 #endif

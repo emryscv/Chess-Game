@@ -24,10 +24,26 @@ Texture::Texture(const char* image, GLenum texType)
 	int widthImg, heightImg, numColCh;
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char* bytes = stbi_load(image, &widthImg, &heightImg, &numColCh, 0);
-	
+
 	TextureSetUp(bytes, GL_RGBA, widthImg, heightImg, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE, GL_NEAREST, GL_REPEAT);
 
 	stbi_image_free(bytes);
+}
+
+Texture::Texture(FT_Face face, GLenum texType)
+{
+	type = texType;
+	TextureSetUp(
+		face->glyph->bitmap.buffer,
+		GL_RED,
+		face->glyph->bitmap.width,
+		face->glyph->bitmap.rows,
+		GL_TEXTURE0,
+		GL_RED,
+		GL_UNSIGNED_BYTE,
+		GL_LINEAR,
+		GL_CLAMP_TO_EDGE
+	);
 }
 
 void Texture::texUnit(Shader shader, const char* uniform, GLuint unit)
@@ -51,4 +67,9 @@ void Texture::Delete()
 {
 
 	glDeleteTextures(1, &ID);
+}
+
+void Texture::Unbind(GLenum type)
+{
+	glBindTexture(type, 0);
 }

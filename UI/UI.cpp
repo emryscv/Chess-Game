@@ -27,7 +27,7 @@ UI::UI(GLfloat* vertices, GLsizeiptr vSize, GLuint* indices, GLsizeiptr iSize)
 	mPiecesShaderProgram = Shader("UI/Shaders/default.vert", "UI/Shaders/default.frag");
 	
 	mSquareVAO = VAO(true);
-	mSquareVBO = VBO(vertices, vSize);
+	mSquareVBO = VBO(vertices, vSize, GL_STATIC_DRAW);
 	mSquareEBO = EBO(indices, iSize);
 
 	mSquareVAO.LinkAttrib(mSquareVBO, 0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
@@ -43,6 +43,9 @@ UI::UI(GLfloat* vertices, GLsizeiptr vSize, GLuint* indices, GLsizeiptr iSize)
 	mPieceTransform = glGetUniformLocation(mPiecesShaderProgram.ID, "transform");
 	mPieceAColor = glGetUniformLocation(mPiecesShaderProgram.ID, "aColor");
 	LoadTextures();
+
+	mText = TextGenerator(true);
+
 	glDisable(GL_DEPTH_TEST);
 }
 
@@ -130,6 +133,7 @@ void UI::PrintBoard()
 	}
 
 	mSquareVAO.Unbind();
+	Texture::Unbind(GL_TEXTURE_2D);
 }
 
 void UI::PrintPromoteMenu(int x, int y, Color turn)
@@ -185,22 +189,22 @@ void UI::PrintPromoteMenu(int x, int y, Color turn)
 void UI::LoadTextures()
 {
 	Texture pawn("Assets/chess_pawn.png", GL_TEXTURE_2D);
-	pawn.texUnit(mPiecesShaderProgram, "text0", 0);
+	pawn.texUnit(mPiecesShaderProgram, "tex0", 0);
 
 	Texture knight("Assets/chess_knight.png", GL_TEXTURE_2D);
-	knight.texUnit(mPiecesShaderProgram, "text0", 0);
+	knight.texUnit(mPiecesShaderProgram, "tex0", 0);
 
 	Texture bishop("Assets/chess_bishop.png", GL_TEXTURE_2D);
-	bishop.texUnit(mPiecesShaderProgram, "text0", 0);
+	bishop.texUnit(mPiecesShaderProgram, "tex0", 0);
 
 	Texture rook("Assets/chess_rook.png", GL_TEXTURE_2D);
-	rook.texUnit(mPiecesShaderProgram, "text0", 0);
+	rook.texUnit(mPiecesShaderProgram, "tex0", 0);
 
 	Texture queen("Assets/chess_queen.png", GL_TEXTURE_2D);
-	queen.texUnit(mPiecesShaderProgram, "text0", 0);
+	queen.texUnit(mPiecesShaderProgram, "tex0", 0);
 
 	Texture king("Assets/chess_king.png", GL_TEXTURE_2D);
-	king.texUnit(mPiecesShaderProgram, "text0", 0);
+	king.texUnit(mPiecesShaderProgram, "tex0", 0);
 
 	mTextures[1] = pawn;
 	mTextures[2] = knight;

@@ -10,9 +10,9 @@ bool Game::IsAValidMove(int originY, int originX, int destinationY, int destinat
 	return board.IsValidMove(originX, originY, destinationX, destinationY, turn);
 }
 
-void Game::Move(int originY, int originX, int destinationY, int destinationX)
+bool Game::Move(int originY, int originX, int destinationY, int destinationX)
 {
-	board.Move(originX, originY, destinationX, destinationY, turn);
+	return board.Move(originX, originY, destinationX, destinationY, turn);
 }
 
 void Game::SwitchTurn()

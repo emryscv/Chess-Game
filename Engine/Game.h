@@ -16,7 +16,7 @@ public:
 	Game(): turn(Color::White), isCheck(false), isCheckMate(false) {}
 	bool IsValidPiece(int y, int X) const; //TODO fix this coordinates
 	bool IsAValidMove(int originY, int originX, int destinationY, int destinationX);
-	void Move(int originY, int originX, int destinationY, int destinationX);
+	bool Move(int originY, int originX, int destinationY, int destinationX);
 	void SwitchTurn();
 	void AfterMove();
 	void PromotePawn(int destinationX, int destinationY, int option);
@@ -33,7 +33,7 @@ public:
 		return isCheck;
 	}
 
-	const bool& GetIsCheckMAte() const {
+	const bool& GetIsCheckMate() const {
 		return isCheckMate;
 	}
 

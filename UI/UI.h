@@ -16,6 +16,7 @@
 #include "Texture.h"
 
 #include "../Engine/Pieces/Piece.h";
+#include "TextGenerator.h"
 
 struct MovingPiece {
 	int representation;
@@ -43,10 +44,11 @@ class UI
 	Shader mBoardShaderProgram;
 
 	Texture mTextures[7];
-	
-	std::pair<int, bool> mBoardRepresentation[8][8];
 
+	std::pair<int, bool> mBoardRepresentation[8][8];
 	MovingPiece mMovingPiece;
+	
+	TextGenerator mText;
 
 public:
 	UI(GLfloat* vertices, GLsizeiptr vSize, GLuint* indices, GLsizeiptr iSize);
@@ -77,6 +79,10 @@ public:
 	void UnsetMovingPiece(int x, int y) {
 		mBoardRepresentation[y][x] = std::make_pair(mMovingPiece.representation, mMovingPiece.isWhite);
 		mMovingPiece = MovingPiece();
+	}
+
+	void PrintCheckMate() {
+		mText.RenderText("Check Mate!!!", 100.0f, 380.0f, 2.0f, glm::vec3(0.5, 0.8f, 0.2f));
 	}
 
 	VAO& squareVAO() {

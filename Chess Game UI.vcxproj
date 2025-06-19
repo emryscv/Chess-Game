@@ -113,7 +113,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>freetype.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;glfw3.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -143,7 +143,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>freetype.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;glfw3.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -156,11 +156,11 @@
     <ClCompile Include="Engine\Pieces\Queen.cpp" />
     <ClCompile Include="Engine\Pieces\Rook.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TextGenerator.cpp" />
     <ClCompile Include="UI\EBO.cpp" />
     <ClCompile Include="UI\glad.c" />
     <ClCompile Include="UI\shaderClass.cpp" />
     <ClCompile Include="UI\stb.cpp" />
+    <ClCompile Include="UI\TextGenerator.cpp" />
     <ClCompile Include="UI\Texture.cpp" />
     <ClCompile Include="UI\UI.cpp" />
     <ClCompile Include="UI\VAO.cpp" />
@@ -177,19 +177,20 @@
     <ClInclude Include="Engine\Pieces\Piece.h" />
     <ClInclude Include="Engine\Pieces\Queen.h" />
     <ClInclude Include="Engine\Pieces\Rook.h" />
-    <ClInclude Include="TextGenerator.h" />
     <ClInclude Include="UI\EBO.h" />
     <ClInclude Include="UI\shaderClass.h" />
+    <ClInclude Include="UI\TextGenerator.h" />
     <ClInclude Include="UI\Texture.h" />
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\VAO.h" />
     <ClInclude Include="UI\VBO.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="text.frag" />
     <None Include="UI\Shaders\color.frag" />
     <None Include="UI\Shaders\default.frag" />
     <None Include="UI\Shaders\default.vert" />
+    <None Include="UI\Shaders\text.frag" />
+    <None Include="UI\Shaders\text.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\chess_bishop.png" />

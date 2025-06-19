@@ -1,7 +1,7 @@
 #version 330 core
-in vec2 texCoord;
+in vec2 texCoords;
 
-out vec4 FragColor;
+out vec4 fragColor;
 
 uniform sampler2D tex0;
 uniform vec4 aColor;
@@ -9,5 +9,5 @@ uniform vec4 aColor;
 
 void main()
 {
-   FragColor = texture(tex0, texCoord) * aColor;
+   fragColor = texture(tex0, texCoords) * aColor;
 }
